@@ -1,0 +1,14 @@
+package com.mygdx.smallrts.gameElements;
+
+import com.badlogic.gdx.graphics.Texture;
+
+public class MineRootClass {
+	
+	// Instance variables
+	
+	// Permanent values
+	Texture background;
+	
+
+
+}

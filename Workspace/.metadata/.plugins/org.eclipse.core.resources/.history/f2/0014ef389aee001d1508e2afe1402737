@@ -1,0 +1,7 @@
+package screensEtc;
+
+import com.badlogic.gdx.Game;
+
+public class GameElement extends Game {
+
+}

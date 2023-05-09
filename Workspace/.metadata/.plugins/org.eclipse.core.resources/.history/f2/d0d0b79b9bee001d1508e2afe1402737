@@ -1,0 +1,16 @@
+package com.mygdx.smallrts.gameElements;
+
+import com.badlogic.gdx.graphics.Texture;
+
+public class PuckRootClass extend Rectangle {
+
+	// To define this instance
+	int number;		// 1, 2, or 3
+	String team;	// LEFT or RIGHT
+	Texture background;
+	
+	// To define current info
+	String currentInstruction;
+	int goldCurrentlyHeld;
+	
+}

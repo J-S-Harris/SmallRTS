@@ -1,0 +1,23 @@
+package screensEtc;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public class GameElement extends Game {
+
+	SpriteBatch batch;
+	BitmapFont font;
+	
+	int pointsLeftTeam;
+	int pointsRightTeam;
+	
+	@Override
+	public void create() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	
+}

@@ -1,0 +1,16 @@
+package com.mygdx.smallrts.gameElements;
+
+import com.badlogic.gdx.graphics.Texture;
+
+public class PuckRootClass {
+
+	// To define this instance
+	String name;
+	String team;
+	Texture background;
+	
+	// To define current info
+	String currentInstruction;
+	int goldCurrentlyHeld;
+	
+}

@@ -1,0 +1,13 @@
+package com.mygdx.smallrts.gameElements;
+
+import com.badlogic.gdx.graphics.Texture;
+
+public class BaseRootClass {
+		
+	// Instance variables
+	Texture sprite;
+	int goldGathered;	// gather 100 to win
+	
+	
+
+}

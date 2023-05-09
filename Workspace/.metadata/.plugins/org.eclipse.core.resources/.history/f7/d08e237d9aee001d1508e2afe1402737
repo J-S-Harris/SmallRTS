@@ -1,0 +1,27 @@
+package screensEtc;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+
+public class GameElement extends Game {
+
+	SpriteBatch batch;
+	BitmapFont font;
+	FitViewport viewport;
+	
+	int pointsLeftTeam;
+	int pointsRightTeam;
+	
+	@Override
+	public void create() {
+
+		batch = new SpriteBatch();
+		font = new BitmapFont();
+		viewport = new FitViewport;
+	}
+
+	
+	
+}
