@@ -9,8 +9,9 @@ import screensEtc.GameElement;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(60);
+		config.setForegroundFPS(600);
 		config.setTitle("SmallRTS");
+		config.setWindowedMode(700, 400);
 		new Lwjgl3Application(new GameElement(), config);
 	}
 }

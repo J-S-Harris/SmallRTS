@@ -7,48 +7,44 @@ import com.badlogic.gdx.math.Rectangle;
 public class PuckRootClass extends Rectangle {
 
 	// To define this instance
-	int number;		// 1, 2, or 3
-	String team;	// LEFT or RIGHT
+	int number; // 1, 2, or 3
+	String team; // LEFT or RIGHT
 	Texture background;
-	
+
 	// Game state and current action
 	boolean actionThisTurnBoolean;
-	String currentInstruction;	// Most recent thing it was told to do
-	String currentAction;			// Current thing it's doing
-	
+	String currentInstruction; // Most recent thing it was told to do
+	String currentAction; // Current thing it's doing
+
 	// To define current info
-	int goldCurrentlyHeld;		
-	
+	int goldCurrentlyHeld;
+
 	// For location to head towards (700 wide, 400 tall)
 	int targetX;
 	int targetY;
-	
+
 	public PuckRootClass(String team, int number) {
 		this.team = team;
 		this.number = number;
 		this.actionThisTurnBoolean = false;
 		this.currentAction = "";
-		
+
 		targetX = 350;
 		targetY = 200;
-		
+
 		if (this.team.equals("LEFT")) {
-			 background = new Texture(Gdx.files.internal("puckLightBlue.png"));
+			background = new Texture(Gdx.files.internal("puckLightBlue.png"));
 		} else {
 			background = new Texture(Gdx.files.internal("puckGreen.png"));
 		}
-		
+
 	}
 
 	// Getters and Setters
-	
-	
-	
+
 	public boolean getActionThisTurnBoolean() {
 		return actionThisTurnBoolean;
 	}
-
-
 
 	public int getTargetX() {
 		return targetX;
@@ -66,23 +62,13 @@ public class PuckRootClass extends Rectangle {
 		this.targetY = targetY;
 	}
 
-	public void setActionThisTurnBoolean(boolean actionThisTurnBoolean) {
-		this.actionThisTurnBoolean = actionThisTurnBoolean;
-	}
-
-
-
 	public String getCurrentAction() {
 		return currentAction;
 	}
 
-
-
 	public void setCurrentAction(String currentAction) {
 		this.currentAction = currentAction;
 	}
-
-
 
 	public int getNumber() {
 		return number;
@@ -123,10 +109,7 @@ public class PuckRootClass extends Rectangle {
 	public void setGoldCurrentlyHeld(int goldCurrentlyHeld) {
 		this.goldCurrentlyHeld = goldCurrentlyHeld;
 	}
-	
-	
+
 	// Getters and Setters
-	
-	
-	
+
 }
