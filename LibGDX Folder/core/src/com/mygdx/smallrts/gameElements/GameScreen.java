@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +11,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import levels.LevelManager;
+import monsters.MonsterBaseClass;
 
 public class GameScreen implements Screen {
 
@@ -58,10 +60,18 @@ public class GameScreen implements Screen {
 	// Points earned by each team so far
 	int leftTeamPoints;
 	int rightTeamPoints;
+	
+	// URGENT TODO: Make the single player and multiplayer screens separate. Copy it over, delete other screen's stuff
+	// Lives in solo mode
+	int lives;
+	
 
 	// Left team sprites
 	Texture leftTeamNoGold = new Texture(Gdx.files.internal("puckLightBlue.png"));
 	Texture leftTeamWithGold = new Texture(Gdx.files.internal("puckLightBlue-Gold.png"));
+
+	// Set up LevelManager
+	LevelManager levelManager;
 
 	public GameScreen() {
 
@@ -70,6 +80,9 @@ public class GameScreen implements Screen {
 
 		assignStartingPositions(leftTeam);
 		assignStartingPositions(rightTeam);
+
+		// TEST
+		levelManager = new LevelManager(batch);
 
 	}
 
@@ -82,6 +95,8 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
+		// Progress one turn
+		
 		ScreenUtils.clear(0, 1, 0, 1);
 
 //		viewport.apply();
@@ -92,23 +107,33 @@ public class GameScreen implements Screen {
 
 		batch.begin();
 
+
 		// After all actions are performed, draw updated positions, points, etc
 		drawGameUnits();
 
 		// Display left team's gold + points
-		font.draw(batch, "POINTS\n", 20, 382);
-		font.draw(batch, Integer.toString(leftTeamPoints), 20, 365);
-
+//		font.draw(batch, "POINTS\n", 20, 382);
+//		font.draw(batch, Integer.toString(leftTeamPoints), 20, 365);
+		font.draw(batch, "LIVES\n", 20, 382);
+		font.draw(batch, Integer.toString(lives), 20, 365);
+		
 		font.draw(batch, "GOLD\n", 20, 45);
 		font.draw(batch, Integer.toString(leftTeamGold), 20, 28);
+		
+		font.draw(batch,  "LEVEL", 290, 382);
+		font.draw(batch,  Integer.toString(levelManager.getCurrentLevel()), 310, 365);
 
-		// Display right team's gold + points
-		font.draw(batch, "POINTS\n", 625, 382);
-		font.draw(batch, Integer.toString(rightTeamPoints), 660, 365);
+//		// Display right team's gold + points
+//		font.draw(batch, "POINTS\n", 625, 382);
+//		font.draw(batch, Integer.toString(rightTeamPoints), 660, 365);
+//
+//		font.draw(batch, "GOLD\n", 640, 45);
+//		font.draw(batch, Integer.toString(rightTeamGold), 660, 28);
 
-		font.draw(batch, "GOLD\n", 640, 45);
-		font.draw(batch, Integer.toString(rightTeamGold), 660, 28);
-
+		// Move monsters; draw monsters
+		levelManager.runTurn();
+		
+		
 		batch.end();
 
 	}
@@ -332,17 +357,19 @@ public class GameScreen implements Screen {
 			if (currentInputsLeft.equals(Integer.toString(puck.getNumber()))) {
 
 				// TODO - big to do; make EVERYTHING team-agnostic,
-					// then just pass in team name.
-					// Remove code bloat.
-				
+				// then just pass in team name.
+				// Remove code bloat.
+
 				// Harvest gold from OWN MINE(+1) or ENEMY BASE(+5/-5)
 				if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
 					puck.setCurrentAction("MineGold");
 				} else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-					puck.setCurrentAction("AttackEnemyBase");
-
+//					puck.setCurrentAction("AttackEnemyBase");
 					// Move puck to pre-defined locations
 					// TODO - condense to one method
+					
+					
+					
 				} else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
 					puck.setCurrentAction("Move300");
 				} else if (Gdx.input.isKeyPressed(Input.Keys.F)) {
@@ -396,18 +423,18 @@ public class GameScreen implements Screen {
 		batch.draw(background, 0, 0);
 
 		batch.draw(baseLeft.getBackground(), baseLeft.x, baseLeft.y);
-		batch.draw(baseRight.getBackground(), baseRight.x, baseRight.y);
+//		batch.draw(baseRight.getBackground(), baseRight.x, baseRight.y);
 
 		batch.draw(mineLeft.getBackground(), mineLeft.x, mineLeft.y);
-		batch.draw(mineRight.getBackground(), mineRight.x, mineRight.y);
-
+//		batch.draw(mineRight.getBackground(), mineRight.x, mineRight.y);
+		
 		for (PuckRootClass puck : leftTeam) {
 			batch.draw(puck.getBackground(), puck.x, puck.y);
 		}
 
-		for (PuckRootClass puck : rightTeam) {
-			batch.draw(puck.getBackground(), puck.x, puck.y);
-		}
+//		for (PuckRootClass puck : rightTeam) {
+//			batch.draw(puck.getBackground(), puck.x, puck.y);
+//		}
 
 	}
 
@@ -476,6 +503,9 @@ public class GameScreen implements Screen {
 
 		leftTeamGold = 0;
 		rightTeamGold = 100;
+		
+		// Single-player lives
+		lives = 10;
 
 		// TODO How make this scale to game units?
 		background = new Texture(Gdx.files.internal("background1.png"));
@@ -485,7 +515,7 @@ public class GameScreen implements Screen {
 	public void assignStartingPositions(ArrayList<PuckRootClass> pucks) {
 
 		// TODO This, and everywhere else, set these numbers to variables to reference
-		
+
 		for (PuckRootClass puck : pucks) {
 			if (puck.getNumber() == 1) {
 				puck.y = 300;

@@ -1,0 +1,19 @@
+package monsters;
+
+public class MonsterVeryFastVeryStrong extends MonsterBaseClass {
+
+	public MonsterVeryFastVeryStrong(float movementSpeed, int attackPower, int goldSteal) {
+		super(movementSpeed, attackPower, goldSteal);
+		// TODO Auto-generated constructor stub
+	}
+
+	public MonsterVeryFastVeryStrong() {
+		super();
+
+		this.movementSpeed = 0.5;
+		this.attackPower = 5;
+		this.goldSteal = 30;
+
+	}
+
+}

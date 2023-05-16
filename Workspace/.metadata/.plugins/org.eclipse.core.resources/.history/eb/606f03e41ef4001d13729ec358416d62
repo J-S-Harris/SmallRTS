@@ -1,0 +1,7 @@
+package levels;
+
+public class LevelManager {
+
+	ArrayList<MonsterBaseClass> enemiesThisTurn;
+	
+}

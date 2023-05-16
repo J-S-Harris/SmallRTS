@@ -1,0 +1,76 @@
+package levels;
+
+import java.util.ArrayList;
+
+import monsters.MonsterBaseClass;
+import monsters.MonsterFastStrong;
+import monsters.MonsterWeakSlow;
+
+public class LevelManager {
+
+	// Overall class variables
+	ArrayList<MonsterBaseClass> enemiesThisTurn;
+	int currentLevel;
+
+	// Instance variables for generating monsters;
+	int quantity;
+	int count;
+
+	public LevelManager() {
+		enemiesThisTurn = new ArrayList<MonsterBaseClass>();
+		currentLevel = 0;
+	}
+
+	public void startNewTurn() {
+		currentLevel++;
+		enemiesThisTurn.clear();
+
+		populateWeakSlow();
+		populateFastStrong();
+		populateVerySlowVeryStrong();
+		
+		runTurn();
+
+	}
+	
+	public void before() {
+		
+		quantity = currentLevel * currentLevel + 1;
+		count = 0;
+	}
+
+	private void populateWeakSlow() {
+		before();
+
+		while (count < quantity) {
+			count++;
+			enemiesThisTurn.add(new MonsterWeakSlow());
+		}
+
+	}
+
+	private void populateFastStrong() {
+
+		before();
+
+		while (count < quantity) {
+			count++;
+			if (count%2 == 0) {
+			enemiesThisTurn.add(new MonsterFastStrong());
+		}
+		}
+		
+	}
+
+	private void populateVerySlowVeryStrong() {
+		before();
+		
+		while (count < quantity) {
+			count++;
+			if (count%3 == 0) {
+			enemiesThisTurn.add(new MonsterFastStrong());
+		}
+		}
+
+	}
+}

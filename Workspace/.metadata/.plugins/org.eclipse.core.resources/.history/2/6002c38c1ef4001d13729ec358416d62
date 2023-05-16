@@ -1,0 +1,10 @@
+package monsters;
+
+public class MonsterFastStrong extends MonsterBaseClass {
+
+	public MonsterFastStrong(float movementSpeed, int attackPower, int goldSteal) {
+		super(movementSpeed, attackPower, goldSteal);
+		// TODO Auto-generated constructor stub
+	}
+
+}

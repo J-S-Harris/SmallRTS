@@ -1,0 +1,13 @@
+package levels;
+
+import java.util.ArrayList;
+
+import monsters.MonsterBaseClass;
+
+public class LevelManager {
+
+	ArrayList<MonsterBaseClass> enemiesThisTurn;
+	
+	
+	
+}

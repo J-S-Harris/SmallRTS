@@ -1,0 +1,63 @@
+package monsters;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
+
+public class MonsterBaseClass extends Rectangle {
+
+	double movementSpeed;
+	int attackPower;
+	int goldSteal;
+	Texture sprite;
+	int movementDelay;
+	
+
+	public MonsterBaseClass(float movementSpeed, int attackPower, int goldSteal) {
+		super();
+		this.movementSpeed = movementSpeed;
+		this.attackPower = attackPower;
+		this.goldSteal = goldSteal;
+		sprite=new Texture(Gdx.files.internal("puckDarkBlue.png"));
+	}
+	
+	public MonsterBaseClass() {
+		sprite=new Texture(Gdx.files.internal("puckDarkBlue.png"));
+		// Use this to just set default movement speed;
+	}
+
+	public double getMovementSpeed() {
+		return movementSpeed;
+	}
+
+	public void setMovementSpeed(double movementSpeed) {
+		this.movementSpeed = movementSpeed;
+	}
+
+	public int getAttackPower() {
+		return attackPower;
+	}
+
+	public void setAttackPower(int attackPower) {
+		this.attackPower = attackPower;
+	}
+
+	public int getGoldSteal() {
+		return goldSteal;
+	}
+
+	public void setGoldSteal(int goldSteal) {
+		this.goldSteal = goldSteal;
+	}
+
+	public Texture getSprite() {
+		return sprite;
+	}
+
+	public void setSprite(Texture sprite) {
+		this.sprite = sprite;
+	}
+	
+	
+
+}

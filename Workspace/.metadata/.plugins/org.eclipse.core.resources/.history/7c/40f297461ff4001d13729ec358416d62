@@ -1,0 +1,27 @@
+package levels;
+
+import java.util.ArrayList;
+
+import monsters.MonsterBaseClass;
+
+public class LevelManager {
+
+	ArrayList<MonsterBaseClass> enemiesThisTurn;
+	int currentLevel;
+	
+	public LevelManager() {
+		enemiesThisTurn = new ArrayList<MonsterBaseClass>();
+		currentLevel = 0;
+	}
+	
+	public void startNewTurn() {
+		currentLevel++;
+		enemiesThisTurn.clear();
+		
+		populateWeakSlow();
+		populateFastStrong();
+		populateVerySlowVeryStrong();
+		
+	}
+
+}
