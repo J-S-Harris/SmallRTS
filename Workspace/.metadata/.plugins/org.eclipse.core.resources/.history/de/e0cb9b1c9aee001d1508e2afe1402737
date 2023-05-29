@@ -1,5 +1,0 @@
-package screensEtc;
-
-public class GameElement extends Game {
-
-}
