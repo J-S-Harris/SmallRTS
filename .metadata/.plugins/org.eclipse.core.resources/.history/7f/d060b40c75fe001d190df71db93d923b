@@ -1,0 +1,18 @@
+package towers;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
+public class BarbedWire extends BaseTowerClass {
+
+	public BarbedWire() {
+		this.towerModelName = "BarbedWire";
+		this.goldToMake = 1;
+		this.monsterRemainsToMake = 0;
+		this.hp = 100;
+		this.monsterPushback = 0;
+		this.monsterDamageTaken = 2;
+		sprite = new Texture(Gdx.files.internal("barbs.png"));
+	}
+	
+}

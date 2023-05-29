@@ -1,0 +1,19 @@
+package towers;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
+public class BasicTower extends BaseTowerClass {
+
+	public BasicTower() {
+		this.towerModelName = "Basic Tower";
+		this.goldToMake = 20;
+		this.monsterRemainsToMake = 0;
+		this.hp = 100;
+		this.monsterPushback = 10;
+		this.monsterDamageTaken = 0;
+		sprite = new Texture(Gdx.files.internal("castle.png"));
+	}
+
+	
+}
