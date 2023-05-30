@@ -1,0 +1,60 @@
+package com.mygdx.smallrts.gameElements;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
+
+import screensEtc.GameScreen;
+
+public class BaseRootClass extends Rectangle {
+		
+	// Instance variables
+	String team;
+	Texture background;
+	int goldGathered;	// gather 100 to win
+
+
+	public BaseRootClass(String team, GameScreen gameScreen) {
+
+		// TODO Make sprite for bases
+		this.background = new Texture(Gdx.files.internal("base.png"));
+		
+		// TODO Set this to the sprite's w/h
+		this.width = this.background.getWidth();
+		this.height = this.background.getHeight();
+		
+		this.x = 80;
+		this.y = gameScreen.getBackground().getHeight()-this.height*2;
+		
+		this.team = team;
+		goldGathered = 0;
+		
+	}
+
+	public String getTeam() {
+		return team;
+	}
+
+	public void setTeam(String team) {
+		this.team = team;
+	}
+
+	public Texture getBackground() {
+		return background;
+	}
+
+	public void setBackground(Texture background) {
+		this.background = background;
+	}
+
+	public int getGoldGathered() {
+		return goldGathered;
+	}
+
+	public void setGoldGathered(int goldGathered) {
+		this.goldGathered = goldGathered;
+	}
+	
+	
+
+}

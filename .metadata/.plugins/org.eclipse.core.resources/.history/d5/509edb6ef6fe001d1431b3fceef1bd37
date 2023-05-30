@@ -1,0 +1,371 @@
+package levels;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import monsters.MonsterBaseClass;
+import monsters.MonsterFastStrong;
+import monsters.MonsterWeakSlow;
+import screensEtc.GameScreen;
+import towers.BaseTowerClass;
+
+public class LevelManager {
+
+	// Overall class variables
+	GameScreen gameScreen;
+	ArrayList<MonsterBaseClass> enemiesThisTurn;
+	ArrayList<BaseTowerClass> towersInPlay;
+	int currentLevel;
+	int movementCounter;
+	SpriteBatch batch;
+	int nextTurnDelay;
+	int nextTurnDelayValue;
+
+	// Instance variables for generating monsters;
+	int quantity;
+	int count;
+	double startingY;
+
+	public LevelManager(GameScreen gameScreen, SpriteBatch batch) {
+		this.batch = batch;
+		this.gameScreen = gameScreen;
+
+		enemiesThisTurn = new ArrayList<MonsterBaseClass>();
+		towersInPlay = new ArrayList<BaseTowerClass>();
+
+		currentLevel = 10;
+
+		startNewTurn();
+
+		nextTurnDelay = 0;
+		nextTurnDelayValue = 30;
+
+	}
+
+	public void startNewTurn() {
+
+		currentLevel++;
+
+//		TODO Put this in a single method
+//		movementCounter = 0;
+//		currentLevel++;
+//		enemiesThisTurn.clear();
+//
+//		
+//		NOTE: Core gameplay loop is:
+//			- Try to gather gold and spend it to create and/or upgrade units
+//			- If a zombie reaches the far left, reduce life by its attack value
+//			- Goal: Survive as long as possible.
+//		
+//		TODO Create a method to tell a minion to attack/swarm nearest enemy
+//		
+//		TODO Rebind controls to use up/down/left/right for move and QWE/ASD/ZXC, etc
+//		
+//		TODO Create a method for the monsters to take damage if they overlap either:
+//			- Currently controlled minion
+//			- Minion told to attack.
+//			
+//		TODO Create some sort of reward for killing enemies - gold?
+//			
+//		TODO Create monster behaviour that damages/robs the mine/base?
+//			
+//		TODO Create start screen/menu, and death screen/menu
+//		
+//		TODO Create a method for spawning an Nth minion and binding it to key N
+//		
+//		TODO Create a method to spend X money to upgrade Y minion stat (attack? movement speed?)
+//				- i.e move a minion to the upgrade building (with Q?) and it will spend x money autom.
+
+		populateVerySlowVeryStrong();
+		populateWeakSlow();
+		populateFastStrong();
+
+		setStartingPositions();
+
+	}
+
+	public void runTurn() {
+
+		if (enemiesThisTurn.size() == 0) {
+			startNewTurn();
+		}
+
+		// Needs to happen even between turns
+		drawAllTowers();
+
+		if (nextTurnDelay == 0) {
+
+			checkForKills();
+
+			checkForCollisionsTowers();
+
+			checkForDestroyedTowers();
+
+			moveEachEnemy();
+
+			checkForLivesLost();
+
+			checkForGameOver();
+
+			checkIfTurnOver();
+
+		} else {
+			nextTurnDelay--;
+		}
+
+	}
+
+	private void checkForGameOver() {
+
+		if (gameScreen.getLives() < 1) {
+			System.out.println("GAME OVER");
+			// TODO Implement properly; change to title screen when dead, display high score
+		}
+
+	}
+
+	private void checkForLivesLost() {
+
+		for (Iterator<MonsterBaseClass> iterator = enemiesThisTurn.iterator(); iterator.hasNext();) {
+			MonsterBaseClass monster = iterator.next();
+			if (monster.x < 10) {
+				gameScreen.setLives(gameScreen.getLives() - monster.getAttackPower());
+				iterator.remove();
+			}
+		}
+
+	}
+
+	private void drawAllTowers() {
+
+		for (BaseTowerClass tower : towersInPlay) {
+			batch.draw(tower.getSprite(), tower.x, tower.y);
+		}
+
+	}
+
+	private void checkForDestroyedTowers() {
+
+		for (Iterator<BaseTowerClass> it = towersInPlay.iterator(); it.hasNext();) {
+			BaseTowerClass tower = it.next();
+			if (tower.getHp() < 1) {
+				it.remove();
+			}
+
+			// TODO Can I delete this?
+			if (tower.getHp() < 1) {
+				enemiesThisTurn.remove(tower);
+			}
+
+		}
+
+	}
+
+	private void checkIfTurnOver() {
+		if (enemiesThisTurn.size() == 0) {
+			nextTurnDelay = nextTurnDelayValue;
+			System.out.println("Turn over!");
+		}
+
+	}
+
+	private void checkForKills() {
+
+		for (Iterator<MonsterBaseClass> it = enemiesThisTurn.iterator(); it.hasNext();) {
+			MonsterBaseClass monster = it.next();
+			if (monster.getRemainingHP() < 1) {
+				it.remove();
+			}
+
+			// TODO Can I delete this?
+			if (monster.getRemainingHP() < 1) {
+				enemiesThisTurn.remove(monster);
+			}
+
+		}
+	}
+
+	private void moveEachEnemy() {
+
+		if (enemiesThisTurn.size() > 0) {
+			if (movementCounter >= 360) {
+				movementCounter = 0;
+			}
+			movementCounter++;
+
+			for (MonsterBaseClass monster : enemiesThisTurn) {
+				if (movementCounter % monster.getMovementDelay() == 0) {
+					monster.x -= monster.getMovementSpeed();
+				}
+				if (monster.getRemainingHP() > 0) {
+					batch.draw(monster.getSprite(), monster.x, monster.y);
+				}
+			}
+		}
+
+	}
+
+	public void checkForCollisionsTowers() {
+
+		for (MonsterBaseClass monster : getEnemiesThisTurn()) {
+
+			if (movementCounter % monster.getMovementDelay() == 0) {
+
+				for (BaseTowerClass tower : getTowersInPlay()) {
+
+					if (monster.overlaps(tower)) {
+
+						System.out.println(tower.getHp() + " " + monster.getRemainingHP());
+						tower.monsterCollisionMethod(monster);
+
+					}
+
+				}
+
+			}
+
+		}
+	}
+
+	private void setStartingPositions() {
+
+		// How randomise this array so that they don't come out in a set order?
+		for (MonsterBaseClass monster : enemiesThisTurn) {
+
+			monster.x = (float) (gameScreen.getBackground().getWidth()20-(Math.random()*2*enemiesThisTurn.size()));
+
+			monster.y = (float) (Math.random()*400)+100-monster.getHeight()/2;
+
+			for (MonsterBaseClass overlapMonster : enemiesThisTurn) {
+				if (monster.x == overlapMonster.x && monster.y == overlapMonster.y && monster != overlapMonster) {
+					monster.x += 40;
+				}
+			}
+		}
+
+	}
+
+	public void before() {
+
+		quantity = currentLevel * currentLevel + 1;
+		count = 0;
+	}
+
+	private void populateWeakSlow() {
+		before();
+
+		while (count < quantity) {
+			count++;
+			enemiesThisTurn.add(new MonsterWeakSlow(this));
+		}
+
+	}
+
+	private void populateFastStrong() {
+
+		before();
+
+		while (count < quantity) {
+			count++;
+			if (count % 2 == 0) {
+				enemiesThisTurn.add(new MonsterFastStrong(this));
+			}
+		}
+
+	}
+
+	private void populateVerySlowVeryStrong() {
+		before();
+
+		while (count < quantity) {
+			count++;
+			if (count % 3 == 0) {
+				enemiesThisTurn.add(new MonsterFastStrong(this));
+			}
+		}
+
+	}
+
+	public ArrayList<BaseTowerClass> getTowersInPlay() {
+		return towersInPlay;
+	}
+
+	public void setTowersInPlay(ArrayList<BaseTowerClass> towersInPlay) {
+		this.towersInPlay = towersInPlay;
+	}
+
+	public ArrayList<MonsterBaseClass> getEnemiesThisTurn() {
+		return enemiesThisTurn;
+	}
+
+	public void setEnemiesThisTurn(ArrayList<MonsterBaseClass> enemiesThisTurn) {
+		this.enemiesThisTurn = enemiesThisTurn;
+	}
+
+	public int getCurrentLevel() {
+		return currentLevel;
+	}
+
+	public void setCurrentLevel(int currentLevel) {
+		this.currentLevel = currentLevel;
+	}
+
+	public int getMovementCounter() {
+		return movementCounter;
+	}
+
+	public void setMovementCounter(int movementCounter) {
+		this.movementCounter = movementCounter;
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
+	}
+
+	public void setBatch(SpriteBatch batch) {
+		this.batch = batch;
+	}
+
+	public int getNextTurnDelay() {
+		return nextTurnDelay;
+	}
+
+	public void setNextTurnDelay(int nextTurnDelay) {
+		this.nextTurnDelay = nextTurnDelay;
+	}
+
+	public int getNextTurnDelayValue() {
+		return nextTurnDelayValue;
+	}
+
+	public void setNextTurnDelayValue(int nextTurnDelayValue) {
+		this.nextTurnDelayValue = nextTurnDelayValue;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public double getStartingY() {
+		return startingY;
+	}
+
+	public void setStartingY(double startingY) {
+		this.startingY = startingY;
+	}
+
+}
