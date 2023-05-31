@@ -1,0 +1,109 @@
+package screensEtc;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public class MenuScreen implements Screen {
+
+	GameScreen gameScreen;
+	Game game;
+	SpriteBatch batch;
+	BitmapFont font;
+	
+	int width;
+	int height;
+	
+	int highScore;
+	
+	public MenuScreen(Game game, int highScore, int width, int height) {
+		this.gameScreen = new GameScreen(this);
+		this.game = game;
+		this.batch = new SpriteBatch();
+		this.font = new BitmapFont();
+		
+		this.width = width;
+		this.height = height;
+
+		this.highScore = highScore;
+		
+	}
+
+	@Override
+	public void show() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void render(float delta) {
+		
+		checkForStartInput();
+
+		processBatch();
+		
+	}
+
+	private void processBatch() {
+		batch.begin();
+		
+		String l1 = "CASTLE DEFENCE";
+		String l2 = "The castle is under attack!";
+		String l3 = "Control your units to gather gold and stone, build towers, or attack enemies directly";
+		String l4 = "CASTLE DEFENCE";
+		String l5 = "CASTLE DEFENCE";
+		String l6 = "CASTLE DEFENCE";
+		
+		// LEFT: Description
+		font.draw(batch, "l1", 100, height-50);
+		font.draw(batch, "l2", 100, height-50);
+		font.draw(batch, "l3", 100, height-50);
+		font.draw(batch, "l4", 100, height-50);
+		font.draw(batch, "l5", 100, height-50);
+		
+		batch.end();
+		
+	}
+
+	private void checkForStartInput() {
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			game.setScreen(gameScreen);
+		}
+		
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

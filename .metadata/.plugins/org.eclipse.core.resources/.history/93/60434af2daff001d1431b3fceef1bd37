@@ -1,0 +1,139 @@
+package screensEtc;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public class MenuScreen implements Screen {
+
+	String l1, l2, l3, l4, l5;
+	String r1, r2, r3, r4, r5, r6;
+	
+	GameScreen gameScreen;
+	Game game;
+	SpriteBatch batch;
+	BitmapFont font;
+
+	int width;
+	int height;
+
+	int highScore;
+
+	public MenuScreen(Game game, int highScore, int width, int height) {
+		this.gameScreen = new GameScreen(this);
+		this.game = game;
+		this.batch = new SpriteBatch();
+		this.font = new BitmapFont();
+
+		this.width = width;
+		this.height = height;
+
+		this.highScore = highScore;
+
+	}
+
+	@Override
+	public void show() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void render(float delta) {
+
+		checkForStartInput();
+
+		processBatch();
+
+	}
+
+	private void processBatch() {
+		batch.begin();
+
+		createLeftSideText();
+		createRightSideText();
+
+		batch.end();
+
+	}
+
+	private void createRightSideText() {
+
+		int lInsetX = width/2 + 50;
+		String r1 = "Controls";
+		String r2 = "You start with 3 units.";
+		String r3 = "TO DIRECTLY MOVE A UNIT:\nHold its number on the number pad and then hold WASD to move it.";
+		String r4 = "TO ISSUE AN ORDER TO A UNIT:\nHold the letter, then tap its number on the number pad";
+		String r5 = "Good luck.";
+		String r6 = "You'll need it...";
+
+		// LEFT: Description
+		font.draw(batch, r1, lInsetX, height - 50);
+		font.draw(batch, r2, lInsetX, height - 100);
+		font.draw(batch, r3, lInsetX, height - 150);
+		font.draw(batch, r4, lInsetX, height - 200);
+		font.draw(batch, r5, lInsetX, height - 250);
+
+	}
+
+	private void createLeftSideText() {
+
+		int lInsetX = width / 100;
+		String l1 = "CASTLE DEFENCE";
+		String l2 = "The castle is under attack!";
+		String l3 = "Control your units to gather gold and stone, build towers,\nor attack enemies directly.";
+		String l4 = "Survive as long as you can, and go for the high score.";
+		String l5 = "Good luck.";
+		String l6 = "You'll need it...";
+
+		// LEFT: Description
+		font.draw(batch, l1, lInsetX, height - 50);
+		font.draw(batch, l2, lInsetX, height - 100);
+		font.draw(batch, l3, lInsetX, height - 150);
+		font.draw(batch, l4, lInsetX, height - 200);
+		font.draw(batch, l5, lInsetX, height - 250);
+
+	}
+
+	private void checkForStartInput() {
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			game.setScreen(gameScreen);
+		}
+
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

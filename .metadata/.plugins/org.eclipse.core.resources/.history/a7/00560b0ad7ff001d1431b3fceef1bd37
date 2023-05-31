@@ -1,0 +1,11 @@
+package screensEtc;
+
+public class MenuScreen extends Screen {
+
+	Game game;
+	
+	public MenuScreen(Game game) {
+		this.game = game;
+	}
+	
+}

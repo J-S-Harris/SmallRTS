@@ -1,0 +1,14 @@
+package screensEtc;
+
+import com.badlogic.gdx.Screen;
+
+public class IntroScreen implements Screen {
+
+	@Override
+	public void create() {
+
+		setScreen(new GameScreen());
+
+	}
+
+}

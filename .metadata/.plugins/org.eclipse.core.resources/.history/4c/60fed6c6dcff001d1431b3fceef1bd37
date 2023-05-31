@@ -1,0 +1,159 @@
+package screensEtc;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public class MenuScreen implements Screen {
+
+	String l1, l2, l3, l4, l5, l6, l7, l8, l9, l10;
+	String r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12;
+	
+	GameScreen gameScreen;
+	Game game;
+	SpriteBatch batch;
+	BitmapFont font;
+
+	int width;
+	int height;
+
+	int highScore;
+
+	public MenuScreen(Game game, int highScore, int width, int height) {
+		this.gameScreen = new GameScreen(this);
+		this.game = game;
+		this.batch = new SpriteBatch();
+		this.font = new BitmapFont();
+
+		this.width = width;
+		this.height = height;
+
+		this.highScore = highScore;
+
+	}
+
+	@Override
+	public void show() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void render(float delta) {
+
+		checkForStartInput();
+
+		processBatch();
+
+	}
+
+	private void processBatch() {
+		batch.begin();
+
+		createLeftSideText();
+		createRightSideText();
+
+		batch.end();
+
+	}
+
+	private void createRightSideText() {
+
+		int lInsetX = width/2;
+		r1 = "Controls";
+		r2 = "You start with 3 units.";
+		r3 = "TO DIRECTLY MOVE A UNIT:";
+		r4 = "Hold its number on the number pad and then hold WASD to move it.";
+		r5 = "TO ISSUE AN ORDER TO A UNIT:";
+		r6 = "Hold the letter, then tap its number on the number pad";
+		r7 = "Q - Harvest gold\nE - Harvest stone\nR - Attack nearest unit";
+		r8 = "T - build simple tower\nB - build damaging barbs";
+		r9 = "";
+		r10 = "1 - Move to a low defensive position";
+		r11 = "2 - Move to a medium defensive position";
+		r12 = "3 - Move to a high defensive position";
+
+		// LEFT: Description
+		font.draw(batch, r1, lInsetX, height - 50);
+		font.draw(batch, r2, lInsetX, height - 100);
+		font.draw(batch, r3, lInsetX, height - 150);
+		font.draw(batch, r4, lInsetX, height - 200);
+		font.draw(batch, r5, lInsetX, height - 250);
+		font.draw(batch, r6, lInsetX, height - 300);
+		font.draw(batch, r7, lInsetX, height - 350);
+		font.draw(batch, r8, lInsetX, height - 430);
+		font.draw(batch, r9, lInsetX, height - 420);
+		font.draw(batch, r10, lInsetX, height - 500);
+		font.draw(batch, r11, lInsetX, height - 530);
+		font.draw(batch, r12, lInsetX, height - 560);
+
+	}
+
+	private void createLeftSideText() {
+
+		int lInsetX = width / 90;
+		l1 = "CASTLE DEFENCE";
+		l2 = "The castle is under attack!";
+		l3 = "Control your units to gather gold and stone, build towers,\nor attack enemies directly.";
+		l4 = "Survive as long as you can, and go for the high score.";
+		l5 = "Good luck.";
+		l6 = "You'll need it...";
+		l7 = "PRESS SPACE TO START";
+		l8 = "High Score:";
+		l9 = Integer.toString(highScore);
+
+		// LEFT: Description
+		font.draw(batch, l1, lInsetX, height - 50);
+		font.draw(batch, l2, lInsetX, height - 100);
+		font.draw(batch, l3, lInsetX, height - 150);
+		font.draw(batch, l4, lInsetX, height - 200);
+		font.draw(batch, l5, lInsetX, height - 250);
+		font.draw(batch, l6, lInsetX, height - 300);
+		font.draw(batch, l7, width/4, height - 350);
+		font.draw(batch, l8, width/4, height - 450);
+		font.draw(batch, l9, width/4, height - 500);
+
+	}
+
+	private void checkForStartInput() {
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			game.setScreen(gameScreen);
+		}
+
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

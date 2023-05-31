@@ -1,0 +1,12 @@
+package screensEtc;
+
+public class IntroScreen implements Screen {
+
+	@Override
+	public void create() {
+
+		setScreen(new GameScreen());
+
+	}
+
+}

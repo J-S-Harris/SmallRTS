@@ -1,0 +1,20 @@
+package screensEtc;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+
+public class IntroScreen extends Game {
+
+	MenuScreen menuScreen;
+	GameScreen gameScreen;
+
+	@Override
+	public void create() {
+		menuScreen = new MenuScreen(this);
+		gameScreen = new GameScreen(this);
+		setScreen(gameScreen);
+		
+	}
+}
