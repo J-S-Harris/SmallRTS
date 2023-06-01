@@ -1,0 +1,776 @@
+package screensEtc;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.smallrts.gameElements.BaseRootClass;
+import com.mygdx.smallrts.gameElements.MineRootClass;
+import com.mygdx.smallrts.gameElements.PuckRootClass;
+import com.mygdx.smallrts.gameElements.StoneChest;
+
+import hudElements.BottomIconBar;
+import levels.LevelManager;
+import monsters.MonsterBaseClass;
+import towers.Barbs;
+import towers.BaseTowerClass;
+import towers.BasicTower;
+
+public class GameScreen implements Screen {
+
+	MenuScreen menuScreen;
+
+	SpriteBatch batch;
+	BitmapFont font;
+	FitViewport viewport;
+	OrthographicCamera camera;
+
+	Screen gameScreen;
+
+	Texture background;
+
+	// Bar for showing icons at the bottom
+	BottomIconBar bottomIconBar;
+
+	// For tracking current inputs
+	String currentInputs;
+
+	// Game elements
+	// TODO - Refactor these both so I have a single ArrayList of (arraylist of?)
+	// all pucks to act on
+	ArrayList<PuckRootClass> team;
+	ArrayList<PuckRootClass> deadUnits;
+	PuckRootClass puck1;
+	PuckRootClass puck2;
+	PuckRootClass puck3;
+	BaseRootClass base;
+	MineRootClass goldChest;
+	StoneChest stoneChest;
+
+	// Movement Speed
+	int movementSpeed;
+
+	// Gold gained by each team
+	int goldGathered;
+
+	// Points earned by each team so far
+	int points;
+
+	// Stone gathered
+	int stoneGathered;
+
+	// Lives in solo mode
+	int lives;
+
+	// Team sprites
+	Texture teamNoGold = new Texture(Gdx.files.internal("puckLightBlue.png"));
+	Texture teamWithGold = new Texture(Gdx.files.internal("puckLightBlue-Gold.png"));
+
+	// Set up LevelManager
+	LevelManager levelManager;
+
+	public GameScreen(MenuScreen menuScreen) {
+
+		this.menuScreen = menuScreen;
+
+		setUpThings();
+		createAllElements();
+
+		assignStartingPositions(team);
+
+		levelManager = new LevelManager(this, batch);
+
+		// Starting Towers:
+		addStartingTowers();
+
+	}
+
+	@Override
+	public void show() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void render(float delta) {
+
+		// Progress one turn
+
+		ScreenUtils.clear(0, 1, 0, 1);
+
+//		viewport.apply();
+
+		check123Pressed(); // Check if 1/2/3 are pressed to see which units will be given orders this frame
+		assignPuckAction(); // Update their current behaviour
+		performActions();
+		checkMiscellaneousInputs();
+		
+		// Check for unit/monster collisions; monster/tower collisions are done in
+		// LevelManager
+		checkForCollisionsUnits();
+
+		removeDeadUnits();
+		
+
+		batch.begin();
+
+		// After all actions are performed, draw updated positions, points, etc
+		drawGameUnits();
+
+		displayHUDElement();
+
+		// Move monsters; draw monsters
+		levelManager.runTurn();
+
+		batch.end();
+
+	}
+
+	private void checkMiscellaneousInputs() {
+		
+		if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
+			buyNewUnit();
+		}
+		
+	}
+
+	private void displayHUDElement() {
+		// Display team's gold + points
+		font.draw(batch, "Remaining Citizens:\n", background.getWidth() / 8, background.getHeight() - 50);
+		font.draw(batch, Integer.toString(lives), background.getWidth() / 8 + 150, background.getHeight() - 50);
+
+		font.draw(batch, "GOLD\n", 20, background.getHeight() - 20);
+		font.draw(batch, Integer.toString(goldGathered), 85, background.getHeight() - 20);
+
+		font.draw(batch, "STONE\n", 15, background.getHeight() - 50);
+		font.draw(batch, Integer.toString(stoneGathered), 85, background.getHeight() - 50);
+
+		font.draw(batch, "LEVEL:", 330, background.getHeight() - 50);
+		font.draw(batch, Integer.toString(levelManager.getCurrentLevel()), 400, background.getHeight() - 50);
+
+		font.draw(batch, "POINTS:", 450, background.getHeight() - 50);
+		font.draw(batch, Integer.toString(getPoints()), 520, background.getHeight() - 50);
+
+	}
+
+	private void checkForCollisionsUnits() {
+
+		for (PuckRootClass puck : team) {
+
+			for (MonsterBaseClass monster : levelManager.getEnemiesThisTurn()) {
+
+				if (puck.overlaps(monster)) {
+
+					if (puck.x < monster.x) {
+
+						calculatePuckMonsterRebound(puck, monster);
+
+						puckTakeDamage(puck, monster);
+
+					}
+				}
+			}
+		}
+	}
+
+	private void puckTakeDamage(PuckRootClass puck, MonsterBaseClass monster) {
+		puck.setHP(puck.getHP() - monster.getAttackPower());
+		if (puck.getHP() < 1) {
+			deadUnits.add(puck);
+		}
+
+	}
+
+	private void removeDeadUnits() {
+
+		for (PuckRootClass puck : deadUnits) {
+			team.remove(puck);
+		}
+
+	}
+
+	private void calculatePuckMonsterRebound(PuckRootClass puck, MonsterBaseClass monster) {
+
+		puck.x -= (monster.getWeight() - puck.getWeight()) * 5;
+		monster.x -= puck.getWeight() - monster.getWeight();
+		monster.setRemainingHP(monster.getRemainingHP() - 1);
+
+	}
+
+	private void performActions() {
+
+		for (PuckRootClass puck : team) {
+			performActions(puck);
+		}
+
+	}
+
+	private void performActions(PuckRootClass puck) {
+
+		switch (puck.getCurrentAction().split("-")[0]) {
+		case "FollowInputs":
+			followInputs(puck);
+			break;
+		case "MineGold":
+			gatherResource(puck, goldChest);
+			break;
+		case "GatherStone":
+			gatherResource(puck, stoneChest);
+			break;
+		case "Move300":
+			move300(puck);
+			break;
+		case "Move200":
+			move200(puck);
+			break;
+		case "Move100":
+			move100(puck);
+			break;
+		case "AttackNearest":
+			targetNearest(puck);
+			break;
+		case "pursueLocatedTarget":
+			pursueLocatedTarget(puck);
+			break;
+		case "Build":
+			buildTower(puck, puck.getCurrentAction().split("-")[1]);
+			break;
+		}
+	}
+
+
+	private void pursueLocatedTarget(PuckRootClass puck) {
+
+		if (puck.getTargetMonster().getRemainingHP() < 1 && levelManager.getEnemiesThisTurn().size() != 0) {
+			targetNearest(puck);
+		}
+
+		puck.setTargetX(puck.getTargetMonster().x);
+		puck.setTargetY(puck.getTargetMonster().y);
+		homeIn(puck);
+
+	}
+
+	private void targetNearest(PuckRootClass puck) {
+
+		MonsterBaseClass currentTarget = null;
+		double referenceX = 1000000000;
+		double referenceY = 1000000000;
+
+		double tempX = 0;
+		double tempY = 0;
+
+		for (MonsterBaseClass monster : levelManager.getEnemiesThisTurn()) {
+
+			tempX = (puck.x - monster.x) * (puck.x - monster.x);
+			tempY = (puck.y - monster.y) * (puck.y - monster.y);
+
+			if (tempX < referenceX && tempY < referenceY) {
+				referenceX = tempX;
+				referenceY = tempY;
+				currentTarget = monster;
+			}
+
+		}
+		puck.setTargetMonster(currentTarget);
+		puck.setCurrentAction("pursueLocatedTarget");
+
+	}
+
+	private void buildTower(PuckRootClass puck, String towerToBuild) {
+
+		// TODO Rewrite: Start by instantiating the correct class,
+//			THEN perform gold cost check and position on screen
+
+		switch (towerToBuild) {
+		case "BasicTower":
+
+			BasicTower basicTower = new BasicTower();
+
+			if (goldGathered >= basicTower.getGoldToMake() && stoneGathered >= basicTower.getStoneToMake()) {
+				goldGathered -= basicTower.getGoldToMake();
+				stoneGathered -= basicTower.getStoneToMake();
+				basicTower.x = puck.x;
+				basicTower.y = puck.y;
+				checkForTowerOverlap(basicTower);
+				levelManager.getTowersInPlay().add(basicTower);
+				puck.setCurrentAction("FollowInputs");
+			}
+			break;
+
+		case "BarbedWire":
+			Barbs barbedWire = new Barbs();
+
+			if (goldGathered >= barbedWire.getGoldToMake() && goldGathered >= barbedWire.getGoldToMake()) {
+
+				goldGathered -= barbedWire.getGoldToMake();
+				stoneGathered -= barbedWire.getStoneToMake();
+				barbedWire.x = puck.x;
+				barbedWire.y = puck.y;
+				checkForTowerOverlap(barbedWire);
+				levelManager.getTowersInPlay().add(barbedWire);
+				puck.setCurrentAction("FollowInputs");
+			}
+		}
+	}
+
+	private void checkForTowerOverlap(BaseTowerClass tower) {
+
+		for (BaseTowerClass existingTower : levelManager.getTowersInPlay()) {
+			if (tower.x == existingTower.x && tower.y == existingTower.y) {
+				tower.x -= 10;
+				tower.y -= 10;
+				break;
+			}
+		}
+
+	}
+
+	private void move100(PuckRootClass puck) {
+
+		if (puck.x < 290 || puck.x > 305) {
+			puck.setTargetX(400);
+		} else {
+			puck.setTargetX(0);
+		}
+
+		if (puck.y < 90 || puck.y > 105) {
+			puck.setTargetY(background.getHeight() / 3);
+		} else {
+			puck.setTargetY(0);
+		}
+
+		homeIn(puck);
+
+	}
+
+	private void move200(PuckRootClass puck) {
+
+		if (puck.x < 290 || puck.x > 305) {
+			puck.setTargetX(400);
+		} else {
+			puck.setTargetX(0);
+		}
+
+		if (puck.y < 190 || puck.y > 205) {
+			puck.setTargetY(background.getHeight() / 2);
+		} else {
+			puck.setTargetY(0);
+		}
+
+		homeIn(puck);
+
+	}
+
+	// TODO These 3 MOVES don't work
+
+	private void move300(PuckRootClass puck) {
+
+		if (puck.x < 290 || puck.x > 305) {
+			puck.setTargetX(400);
+		} else {
+			puck.setTargetX(0);
+		}
+
+		if (puck.y < 290 || puck.y > 305) {
+			puck.setTargetY(background.getHeight() / 3 * 2);
+		} else {
+			puck.setTargetY(0);
+		}
+
+		homeIn(puck);
+	}
+
+	private void gatherResource(PuckRootClass puck, Rectangle targetBuilding) {
+
+		// If not overlapping mine OR base: travel there
+
+		if (targetBuilding == goldChest) {
+
+			if (puck.getGoldCurrentlyHeld() < 1 && !puck.overlaps(targetBuilding)) {
+				puck.setTargetX((int) (targetBuilding.x + targetBuilding.width / 2));
+				puck.setTargetY((int) (targetBuilding.y + targetBuilding.height / 2));
+			} else if (puck.getGoldCurrentlyHeld() > 0 && !puck.overlaps(base)) {
+				puck.setTargetX((int) (base.x + base.width / 2));
+				puck.setTargetY((int) (base.y + base.height / 2));
+
+				// If you no gold at the mine, or have gold at the base: mine/deposit it
+			} else if ((puck.getGoldCurrentlyHeld() < 1 && puck.overlaps(targetBuilding))) {
+
+				puck.setGoldCurrentlyHeld(puck.getGoldCurrentlyHeld() + 1);
+				puck.setSprite(2);
+			} else if ((puck.getGoldCurrentlyHeld() > 0 && puck.overlaps(base))) {
+
+				goldGathered += puck.getGoldCurrentlyHeld();
+				points += puck.getGoldCurrentlyHeld();
+				puck.setGoldCurrentlyHeld(0);
+
+				puck.setGoldCurrentlyHeld(puck.getGoldCurrentlyHeld() - 1);
+				puck.setSprite(1);
+
+				// If you have no gold at the base, or have gold at the mine: travel to the
+				// other one
+			} else if ((puck.getGoldCurrentlyHeld() < 1 && puck.overlaps(base))) {
+				puck.setTargetX((int) (targetBuilding.x + targetBuilding.width / 2));
+				puck.setTargetY((int) (targetBuilding.y + targetBuilding.height / 2));
+			} else if ((puck.getGoldCurrentlyHeld() > 0 && puck.overlaps(targetBuilding))) {
+				puck.setTargetX((int) (base.x + base.width / 2));
+				puck.setTargetY((int) (base.y + base.height / 2));
+			}
+
+		}
+
+		if (targetBuilding == stoneChest) {
+
+			if (puck.getStoneCurrentlyHeld() < 1 && !puck.overlaps(targetBuilding)) {
+				puck.setTargetX((int) (targetBuilding.x + targetBuilding.width / 2));
+				puck.setTargetY((int) (targetBuilding.y + targetBuilding.height / 2));
+			} else if (puck.getStoneCurrentlyHeld() > 0 && !puck.overlaps(base)) {
+				puck.setTargetX((int) (base.x + base.width / 2));
+				puck.setTargetY((int) (base.y + base.height / 2));
+
+				// If you no gold at the mine, or have gold at the base: mine/deposit it
+			} else if ((puck.getStoneCurrentlyHeld() < 1 && puck.overlaps(targetBuilding))) {
+
+				puck.setStoneCurrentlyHeld(puck.getStoneCurrentlyHeld() + 1);
+				puck.setSprite(2);
+			} else if ((puck.getStoneCurrentlyHeld() > 0 && puck.overlaps(base))) {
+
+				stoneGathered += puck.getStoneCurrentlyHeld();
+				points += puck.getStoneCurrentlyHeld();
+				puck.setStoneCurrentlyHeld(0);
+				puck.setSprite(1);
+
+				// If you have no gold at the base, or have gold at the mine: travel to the
+				// other one
+			} else if ((puck.getStoneCurrentlyHeld() < 1 && puck.overlaps(base))) {
+				puck.setTargetX((int) (targetBuilding.x + targetBuilding.width / 2));
+				puck.setTargetY((int) (targetBuilding.y + targetBuilding.height / 2));
+			} else if ((puck.getStoneCurrentlyHeld() > 0 && puck.overlaps(targetBuilding))) {
+				puck.setTargetX((int) (base.x + base.width / 2));
+				puck.setTargetY((int) (base.y + base.height / 2));
+			}
+
+		}
+
+		homeIn(puck);
+	}
+
+	private void homeIn(PuckRootClass puck) {
+
+		if (puck.getTargetX() != 0) {
+
+			if (puck.x < puck.getTargetX()) {
+				puck.x += movementSpeed;
+			} else {
+				puck.x -= movementSpeed;
+			}
+		}
+
+		if (puck.getTargetY() != 0) {
+			if (puck.y < puck.getTargetY()) {
+				puck.y += movementSpeed;
+			} else {
+				puck.y -= movementSpeed;
+			}
+
+		}
+
+	}
+
+	private void followInputs(PuckRootClass puck) {
+
+		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+			if (puck.y >= 55) {
+				puck.y -= movementSpeed;
+			}
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			if (puck.y < 500) {
+				puck.y += movementSpeed;
+			}
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+			if (puck.x - movementSpeed + puck.getWidth() / 2 >= 0) {
+				puck.x -= movementSpeed;
+			}
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+			if (puck.x <= background.getWidth() - 50) {
+				puck.x += movementSpeed;
+			}
+		}
+
+	}
+
+	private void assignPuckAction() {
+
+		for (PuckRootClass puck : team) {
+
+			if (currentInputs.equals(Integer.toString(puck.getNumber()))) {
+
+				// TODO Remove code bloat.
+
+				// Harvest gold from mine
+				if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+					puck.setCurrentAction("MineGold");
+
+					// Harvest stone from mine
+				} else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+					puck.setCurrentAction("GatherStone");
+
+					// Attack nearest enemy
+				} else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+					puck.setCurrentAction("AttackNearest");
+
+					// Build BasicTower in current location
+				} else if (Gdx.input.isKeyPressed(Input.Keys.T)) {
+					puck.setCurrentAction("Build-BasicTower");
+//					TODO Implement this ^^^^
+
+				} else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
+
+					puck.setCurrentAction("Build-BarbedWire");
+
+					// Move to 100/200/300
+				} else if (Gdx.input.isKeyPressed(Input.Keys.NUM_3)) {
+					puck.setCurrentAction("Move300");
+				} else if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
+					puck.setCurrentAction("Move200");
+				} else if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
+					puck.setCurrentAction("Move100");
+
+					// Wipes current input
+				} else if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+					puck.setCurrentAction("");
+
+					// If nothing else pressed, puck will follow user inputs:
+				} else {
+					puck.setCurrentAction("FollowInputs");
+				}
+
+			}
+
+		}
+	}
+
+	private void buyNewUnit() {
+		if (goldGathered >= 100 && team.size() < 10) {
+
+			PuckRootClass puck;
+			goldGathered -= 100;
+
+			int count = 0;
+			while (count < 9) {
+				
+				count++;
+
+				for (PuckRootClass teamPuck : team) {
+					if (teamPuck.getNumber() != count) {
+						puck = new PuckRootClass(count, "puck" + Integer.toString(count));
+						puck.x = base.getX();
+						puck.y = base.getY()-100;
+						team.add(puck);
+						break;
+					}
+				
+				}
+			
+
+		}
+		}
+	}
+
+	private void check123Pressed() {
+
+		currentInputs = "";
+
+		// TODO Get these to refer to a enum of input + appropriate method for each team
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_1)) {
+			currentInputs = "1";
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_2)) {
+			currentInputs = "2";
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_3)) {
+			currentInputs = "3";
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_4)) {
+			currentInputs = "4";
+		}
+
+	}
+
+	private void drawGameUnits() {
+
+		batch.draw(background, 0, 0);
+		batch.draw(base.getBackground(), base.x, base.y + base.getHeight() / 2);
+		batch.draw(goldChest.getBackground(), goldChest.x, goldChest.y);
+		batch.draw(stoneChest.getBackground(), stoneChest.x, stoneChest.y + stoneChest.getHeight() / 2);
+
+		for (PuckRootClass puck : team) {
+			batch.draw(puck.getBackground(), puck.x + puck.getWidth() / 2, puck.y + puck.getHeight() / 2);
+		}
+
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+
+	}
+
+// Helper methods
+
+	public void createAllElements() {
+
+		team = new ArrayList<PuckRootClass>();
+		deadUnits = new ArrayList<PuckRootClass>();
+		team.add(puck1 = new PuckRootClass(1, "puck1"));
+		team.add(puck2 = new PuckRootClass(2, "puck2"));
+		team.add(puck3 = new PuckRootClass(3, "puck3"));
+		base = new BaseRootClass(this);
+		goldChest = new MineRootClass(80, 150);
+
+		// TODO Rename this, change name, etc
+		stoneChest = new StoneChest(80, 400);
+
+	}
+
+	private void addStartingTowers() {
+
+		BasicTower basicStarterTower1 = new BasicTower();
+		basicStarterTower1.x = background.getWidth() / 5 * 3;
+		basicStarterTower1.y = background.getHeight() / 2 + basicStarterTower1.getHeight();
+		levelManager.getTowersInPlay().add(basicStarterTower1);
+
+		Barbs starterBarbs1 = new Barbs();
+		starterBarbs1.x = basicStarterTower1.x + basicStarterTower1.getWidth();
+		starterBarbs1.y = basicStarterTower1.y;
+		levelManager.getTowersInPlay().add(starterBarbs1);
+
+		BasicTower basicStarterTower2 = new BasicTower();
+		basicStarterTower2.x = background.getWidth() / 5 * 3;
+		basicStarterTower2.y = background.getHeight() / 2 - basicStarterTower2.getHeight() * 2;
+		levelManager.getTowersInPlay().add(basicStarterTower2);
+
+		Barbs starterBarbs2 = new Barbs();
+		starterBarbs2.x = basicStarterTower2.x + basicStarterTower2.getWidth();
+		starterBarbs2.y = basicStarterTower2.y;
+		levelManager.getTowersInPlay().add(starterBarbs2);
+
+	}
+
+	public void setUpThings() {
+
+		currentInputs = "";
+
+		batch = new SpriteBatch();
+		font = new BitmapFont();
+
+		camera = new OrthographicCamera(100, 100);
+		viewport = new FitViewport(100, 100, camera);
+
+		movementSpeed = 2;
+
+		goldGathered = 100;
+
+		// Stone collected
+		stoneGathered = 10;
+
+		// Lives
+		lives = 10;
+
+		// TODO How make this scale to game units?
+		background = new Texture(Gdx.files.internal("backgroundLarge.png"));
+	}
+
+	public void assignStartingPositions(ArrayList<PuckRootClass> pucks) {
+
+		// TODO This, and everywhere else, set these numbers to variables to reference
+
+		for (PuckRootClass puck : pucks) {
+			if (puck.getNumber() == 1) {
+				puck.y = background.getHeight() / 4 * 3;
+			}
+			if (puck.getNumber() == 2) {
+				puck.y = background.getHeight() / 4 * 2;
+			}
+			if (puck.getNumber() == 3) {
+				puck.y = background.getHeight() / 4;
+			}
+
+			puck.x = background.getWidth() / 5;
+
+		}
+
+	}
+
+// Getters and Setters
+
+	public int getLives() {
+		return lives;
+	}
+
+	public void setLives(int lives) {
+		this.lives = lives;
+	}
+
+	public Texture getBackground() {
+		return background;
+	}
+
+	public void setBackground(Texture background) {
+		this.background = background;
+	}
+
+	public MenuScreen getMenuScreen() {
+		return menuScreen;
+	}
+
+	public void setGame(MenuScreen menuScreen) {
+		this.menuScreen = menuScreen;
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
+
+}
