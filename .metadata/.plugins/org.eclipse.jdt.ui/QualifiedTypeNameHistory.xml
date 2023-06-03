@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.lang.Integer"/>
+    <fullyQualifiedTypeName name="com.mygdx.smallrts.gameElements.RescueOperationCentre"/>
+    <fullyQualifiedTypeName name="com.mygdx.smallrts.gameElements.SECOND_RESOURCE_SOURCE"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.math.Rectangle"/>
+    <fullyQualifiedTypeName name="com.mygdx.smallrts.gameElements.StoneChest"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.Input"/>
+    <fullyQualifiedTypeName name="java.lang.String"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.utils.ScreenUtils"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.utils.viewport.FillViewport"/>
+    <fullyQualifiedTypeName name="hudElements.BottomIconBar"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.BitmapFont"/>
+    <fullyQualifiedTypeName name="utilityClasses.MenuScreenTextManager"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.Input.Keys"/>
+    <fullyQualifiedTypeName name="towers.BasicTower"/>
+    <fullyQualifiedTypeName name="towers.BaseTowerClass"/>
+    <fullyQualifiedTypeName name="monsters.MonsterBaseClass"/>
+    <fullyQualifiedTypeName name="towers.Landmine"/>
+    <fullyQualifiedTypeName name="com.mygdx.smallrts.gameElements.PuckRootClass"/>
+</qualifiedTypeNameHistroy>

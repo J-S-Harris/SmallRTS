@@ -1,0 +1,202 @@
+package screensEtc;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ScreenUtils;
+
+import utilityClasses.MenuScreenTextManager;
+
+public class MenuScreen implements Screen {
+
+	GameScreen gameScreen;
+	Game game;
+	SpriteBatch batch;
+	BitmapFont font;
+	BitmapFont fontHighScore;
+
+	int lInsetX;
+	int rInsetX;
+
+	MenuScreenTextManager textManager;
+	ArrayList<String> leftText;
+	ArrayList<String> rightText;
+
+	int width;
+	int height;
+
+	int highScore;
+
+	public MenuScreen(Game game, int highScore, int width, int height) {
+
+		setThingsUp(game, highScore, width, height);
+
+	}
+
+	@Override
+	public void show() {
+		gameScreen = new GameScreen(this);
+
+	}
+
+	@Override
+	public void render(float delta) {
+
+		ScreenUtils.clear(0, 0, 0, 1);
+		checkForStartInput();
+		
+		processBatch();
+
+	}
+
+	public void setThingsUp(Game game, int highScore, int width, int height) {
+		this.gameScreen = new GameScreen(this);
+		this.game = game;
+		this.batch = new SpriteBatch();
+		this.font = new BitmapFont();
+		this.fontHighScore = new BitmapFont();
+		fontHighScore.setColor(1,0,0,1);
+		
+		lInsetX = gameScreen.getBackground().getWidth() / 20;
+		rInsetX = gameScreen.getBackground().getWidth() / 2;
+
+		textManager = new MenuScreenTextManager(this);
+
+		this.width = width;
+		this.height = height;
+
+		this.highScore = highScore;
+	}
+	
+	private void processBatch() {
+		
+		leftText = textManager.getLeftText();
+		rightText = textManager.getRightText();
+		
+		batch.begin();
+
+		textManager.renderText();
+
+		batch.end();
+
+	}
+
+	private void checkForStartInput() {
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			game.setScreen(gameScreen);
+		}
+
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+	public int getHighScore() {
+		return highScore;
+	}
+
+	public void setHighScore(int highScore) {
+		this.highScore = highScore;
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
+	}
+
+	public void setBatch(SpriteBatch batch) {
+		this.batch = batch;
+	}
+
+	public BitmapFont getFont() {
+		return font;
+	}
+
+	public void setFont(BitmapFont font) {
+		this.font = font;
+	}
+
+	public int getlInsetX() {
+		return lInsetX;
+	}
+
+	public void setlInsetX(int lInsetX) {
+		this.lInsetX = lInsetX;
+	}
+
+	public int getrInsetX() {
+		return rInsetX;
+	}
+
+	public void setrInsetX(int rInsetX) {
+		this.rInsetX = rInsetX;
+	}
+
+	public GameScreen getGameScreen() {
+		return gameScreen;
+	}
+
+	public void setGameScreen(GameScreen gameScreen) {
+		this.gameScreen = gameScreen;
+	}
+
+	public MenuScreenTextManager getTextManager() {
+		return textManager;
+	}
+
+	public void setTextManager(MenuScreenTextManager textManager) {
+		this.textManager = textManager;
+	}
+
+	public BitmapFont getFontHighScore() {
+		return fontHighScore;
+	}
+
+	public void setFontHighScore(BitmapFont fontHighScore) {
+		this.fontHighScore = fontHighScore;
+	}
+	
+	
+	
+
+}

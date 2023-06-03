@@ -1,37 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="Build"/>
+		<item key="selection" value="check"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="check"/>
+			<item value="dead"/>
+			<item value="gamesc"/>
+			<item value="[0]"/>
+			<item value=".i)"/>
+			<item value=".i"/>
 			<item value="build"/>
-			<item value="buld"/>
-			<item value="movem"/>
-			<item value="moveme"/>
-			<item value="movementsp"/>
-			<item value="ForCollisionsTowers"/>
-			<item value="coll"/>
-			<item value="gamescree"/>
-			<item value="collis"/>
-			<item value="setRem"/>
-			<item value="setrem"/>
-			<item value="sethp"/>
-			<item value=".sethp"/>
-			<item value="sprite"/>
-			<item value="sprite ="/>
+			<item value="keys."/>
+			<item value="nmet"/>
+			<item value="monster"/>
+			<item value="drawGame"/>
+			<item value="draw"/>
+			<item value="points"/>
+			<item value="gather"/>
+			<item value="points +"/>
 		</list>
 		<list key="replacehistory">
+			<item value="barbsRef"/>
+			<item value="puckRef"/>
+			<item value="towerRef"/>
+			<item value="renderText"/>
+			<item value=""/>
+			<item value="team"/>
+			<item value="base"/>
+			<item value="Points"/>
+			<item value="points"/>
+			<item value="currentInputs"/>
+			<item value="goldChest"/>
+			<item value="goldGathered"/>
+			<item value="lInsetX"/>
+			<item value="GameScreen"/>
+			<item value="gameScreen"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="1503"/>
-		<item key="DIALOG_Y_ORIGIN" value="261"/>
+		<item key="DIALOG_X_ORIGIN" value="1156"/>
+		<item key="DIALOG_Y_ORIGIN" value="479"/>
 		<item key="DIALOG_WIDTH" value="322"/>
-		<item key="DIALOG_HEIGHT" value="447"/>
+		<item key="DIALOG_HEIGHT" value="465"/>
 		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|5|0|Segoe UI"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="724"/>
+		<item key="DIALOG_Y_ORIGIN" value="416"/>
 	</section>
 </section>

@@ -1,0 +1,26 @@
+package monsters;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
+import levels.LevelManager;
+
+public class MonsterFastStrong extends MonsterBaseClass {
+
+	public MonsterFastStrong(LevelManager levelManager) {
+		super(levelManager);
+
+		this.movementSpeed = 4 + levelManager.getCurrentLevel() + Math.random()+2-1;
+		this.attackPower = 2;
+		this.goldSteal = 10;
+		this.baseSpeed = 15;
+		this.movementDelay = (int) (baseSpeed + (Math.random()*6-3));
+		this.remainingHP = (int) (15 + Math.pow(levelManager.getCurrentLevel(), 2));
+		this.weight = 10;
+		this.sprite = new Texture(Gdx.files.internal("enemySpritePurple-1.png"));
+		this.width = sprite.getWidth();
+		this.height = sprite.getHeight();
+		this.pointsGiven = 20;
+	}
+
+}

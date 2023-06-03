@@ -1,0 +1,42 @@
+package towers;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
+import levels.LevelManager;
+import monsters.MonsterBaseClass;
+
+public class Landmine extends BaseTowerClass {
+	
+	int expandedWidth = 100;
+	int expandedHeight = 100;
+
+	public Landmine(LevelManager levelManager) {
+		super(levelManager);
+		
+		this.towerModelName = "Basic Tower";
+		this.goldToMake = 0;
+		this.stoneToMake = 0;
+		this.monsterRemainsToMake = 0;
+		this.hp = 999;
+		this.monsterPushback = 0;
+		this.monsterDamageTaken = 40;
+		sprite = new Texture(Gdx.files.internal("castle.png"));
+		this.width = sprite.getWidth();
+		this.height = sprite.getHeight();
+	}
+	
+	@Override
+	public void monsterCollisionMethod(MonsterBaseClass monster) {
+		this.width = expandedWidth;
+		this.height = expandedHeight;
+		for (MonsterBaseClass monster2 : levelManager.getEnemiesThisTurn()) {
+			if (monster2.overlaps(this)) {
+				monster2.setRemainingHP(monster2.getRemainingHP() - this.monsterDamageTaken);
+			}
+		}
+		this.monsterDamageTaken = 0;
+		this.hp = 0;
+	}
+	
+}

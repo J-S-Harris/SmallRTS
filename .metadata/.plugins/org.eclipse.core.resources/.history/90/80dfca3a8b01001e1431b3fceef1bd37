@@ -1,0 +1,93 @@
+package utilityClasses;
+
+import java.util.ArrayList;
+
+import screensEtc.MenuScreen;
+
+public class MenuScreenTextManager {
+
+	MenuScreen menuScreen;
+	ArrayList<String> leftText;
+	ArrayList<String> rightText;
+	
+	public MenuScreenTextManager(MenuScreen menuScreen) {
+		
+		this.menuScreen = menuScreen;
+		gatherText();
+		
+	}
+
+	private void gatherText() {
+		createLeftSideText();
+		createRightSideText();
+		
+	}
+	
+	public void renderText() {
+		int count = 0;
+		while (count < leftText.size()) {
+			menuScreen.getFont().draw(menuScreen.getBatch(), leftText.get(count), menuScreen.getlInsetX(), menuScreen.getGameScreen().getBackground().getHeight() - (50 * count) + 30);
+			count++;
+		}
+		count = 0;
+		while (count < rightText.size()) {
+			menuScreen.getFont().draw(menuScreen.getBatch(), rightText.get(count), menuScreen.getrInsetX(), menuScreen.getGameScreen().getBackground().getHeight() - (50 * count) + 30);
+			count++;
+		}
+
+	}
+	
+	public void createRightSideText() {
+
+		rightText = new ArrayList<String>();
+		rightText.add("Controls");
+		rightText.add("TO DIRECTLY MOVE A UNIT:");
+		rightText.add("Hold its number on the number pad,\nand then hold WASD to move it.");
+		rightText.add("TO ISSUE A CONTINUOUS ORDER TO A UNIT:");
+		rightText.add("Hold the letter, then tap its number on the number pad:");
+		rightText.add("Q - Harvest gold");
+		rightText.add("E - Harvest stone");
+		rightText.add("R - Attack nearest unit");
+		rightText.add("T - build simple tower (10 gold, 15 stone; blocks enemies)");
+		rightText.add("B - build damaging barbs (6 gold, 2 stone; hurts enemies)");
+		rightText.add("R - Continuously attack enemies (deals small damage each hit;\nunit takes damage too!)");
+		rightText.add("0 - Buy new unit (100 gold; max of 9)");
+		rightText.add("1/2/3 - Move to low/medium/high defensive position");
+
+	}
+
+	public void createLeftSideText() {
+
+		leftText = new ArrayList<String>();
+		leftText.add("CASTLE DEFENCE");
+		leftText.add("The castle is under attack!");
+		leftText.add("Control your units to gather gold and stone, build towers,\nor attack enemies directly.");
+		leftText.add("You start with 3 units with limited HP, and have 10 citizens to protect.");
+		leftText.add("Citizens will die when a monster reaches the castle.");
+		leftText.add("The stronger the monster, the more citizens you lose!");
+		leftText.add("Help the citizens survive as long as you can,\nand go for the high score.");
+		leftText.add("Good luck!");
+		leftText.add("PRESS SPACE TO START");
+		leftText.add("High score: " + Integer.toString(menuScreen.getHighScore()));
+
+	}
+
+	public ArrayList<String> getLeftText() {
+		return leftText;
+	}
+
+	public void setLeftText(ArrayList<String> leftText) {
+		this.leftText = leftText;
+	}
+
+	public ArrayList<String> getRightText() {
+		return rightText;
+	}
+
+	public void setRightText(ArrayList<String> rightText) {
+		this.rightText = rightText;
+	}
+	
+	
+	
+}

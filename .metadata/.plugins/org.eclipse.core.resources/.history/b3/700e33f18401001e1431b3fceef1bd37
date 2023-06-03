@@ -1,0 +1,11 @@
+package utilityClasses;
+
+public class MenuScreenTextManager {
+
+	public MenuScreenTextManager() {
+		
+		gatherText();
+		
+	}
+	
+}
