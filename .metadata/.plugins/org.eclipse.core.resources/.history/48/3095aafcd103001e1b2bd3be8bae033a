@@ -1,0 +1,19 @@
+package droppedTreasure;
+
+import monsters.MonsterBaseClass;
+
+public class DroppedTreasure extends Rectangle{
+
+	int droppedGold;
+	int droppedStone;
+	int droppedPoints;
+	
+	
+	
+	public DroppedTreasure(MonsterBaseClass monster) {
+		droppedGold = (int) (Math.random()*monster.getWeight()+3);
+		droppedStone = (int) (Math.random()*monster.getWeight()+3);
+		droppedPoints = monster.getWeight()*3;
+	}
+	
+}

@@ -1,0 +1,179 @@
+package com.mygdx.smallrts.gameElements;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
+
+import monsters.MonsterBaseClass;
+
+public class PuckRootClass extends Rectangle {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// To define this instance
+	int number; // 1, 2, or 3
+	int HP;	// Unit dies if < 1;
+	Texture background;
+	String spriteNameBase;
+	String spriteFileName;
+
+	// Game state and current action
+	boolean actionThisTurnBoolean;
+	String currentInstruction; // Most recent thing it was told to do
+	String currentAction; // Current thing it's doing
+
+	// To define current info
+	int goldCurrentlyHeld;
+	int stoneCurrentlyHeld;
+
+	// For location to head towards (700 wide, 400 tall)
+	float targetX;
+	float targetY;
+	
+	// Movementspeed for THIS puck
+	int movementSpeed = 2;
+	
+	// For monster to attack
+	MonsterBaseClass targetMonster;
+	
+	// For collisions
+	private int weight;
+
+	public PuckRootClass(int number, String string) {
+		this.number = number;
+		this.HP = 40;
+		this.actionThisTurnBoolean = false;
+		this.currentAction = "";
+		
+
+		targetX = 350;
+		targetY = 200;
+		
+		this.targetMonster = null;
+		
+		this.setWeight(3);
+		
+		spriteNameBase = "puck";
+		
+		setSprite(1);
+		
+		width = background.getWidth();
+		height = background.getHeight();
+				
+	}
+	
+	// Other methods
+
+	public void setSprite(int number) {
+		
+		spriteFileName = spriteNameBase+this.number+"-"+number+".png";
+		background = new Texture(Gdx.files.internal(spriteFileName));
+		
+	}
+
+	public boolean getActionThisTurnBoolean() {
+		return actionThisTurnBoolean;
+	}
+	
+	public float getTargetX() {
+		return targetX;
+	}
+
+	public void setTargetX(float x) {
+		this.targetX = x;
+	}
+
+	public float getTargetY() {
+		return targetY;
+	}
+
+	public void setTargetY(float y) {
+		this.targetY = y;
+	}
+
+	public String getCurrentAction() {
+		return currentAction;
+	}
+
+	public void setCurrentAction(String currentAction) {
+		this.currentAction = currentAction;
+	}
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public Texture getBackground() {
+		return background;
+	}
+
+	public void setBackground(Texture background) {
+		this.background = background;
+	}
+
+	public String getCurrentInstruction() {
+		return currentInstruction;
+	}
+
+	public void setCurrentInstruction(String currentInstruction) {
+		this.currentInstruction = currentInstruction;
+	}
+
+	public int getGoldCurrentlyHeld() {
+		return goldCurrentlyHeld;
+	}
+
+	public void setGoldCurrentlyHeld(int goldCurrentlyHeld) {
+		this.goldCurrentlyHeld = goldCurrentlyHeld;
+	}
+
+	public MonsterBaseClass getTargetMonster() {
+		return targetMonster;
+	}
+
+	public void setTargetMonster(MonsterBaseClass targetMonster) {
+		this.targetMonster = targetMonster;
+	}
+
+	public int getWeight() {
+		return weight;
+	}
+
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
+
+	public int getStoneCurrentlyHeld() {
+		return stoneCurrentlyHeld;
+	}
+
+	public void setStoneCurrentlyHeld(int stoneCurrentlyHeld) {
+		this.stoneCurrentlyHeld = stoneCurrentlyHeld;
+	}
+
+	public int getHP() {
+		return HP;
+	}
+
+	public void setHP(int hP) {
+		HP = hP;
+	}
+
+	public int getMovementSpeed() {
+		return movementSpeed;
+	}
+
+	public void setMovementSpeed(int movementSpeed) {
+		this.movementSpeed = movementSpeed;
+	}
+	
+	
+
+
+}

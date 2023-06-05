@@ -1,0 +1,13 @@
+package droppedTreasure;
+
+public class DroppedTreasure {
+
+	int droppedGold;
+	int droppedStone;
+	int droppedPoints;
+	
+	public DroppedTreasure() {
+		
+	}
+	
+}
