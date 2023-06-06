@@ -146,7 +146,6 @@ public class LevelManager {
 			}
 			gameScreen.getMenuScreen().getTextManager().gatherText();
 			gameScreen.getMenuScreen().getGame().setScreen(gameScreen.getMenuScreen());
-			System.out.println("GAME OVER");
 		}
 
 	}
@@ -186,7 +185,6 @@ public class LevelManager {
 	private void checkIfTurnOver() {
 		if (enemiesThisTurn.size() == 0) {
 			nextTurnDelay = nextTurnDelayValue;
-			System.out.println("Turn over!");
 		}
 
 	}

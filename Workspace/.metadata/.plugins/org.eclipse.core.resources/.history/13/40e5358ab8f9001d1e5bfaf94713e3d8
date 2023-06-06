@@ -1,0 +1,17 @@
+package towers;
+
+import monsters.MonsterBaseClass;
+
+public class BasicTower extends BaseTowerClass {
+
+	public BasicTower() {
+		this.towerModelName = "Basic Tower";
+		this.goldToMake = 100;
+		this.monsterRemainsToMake = 0;
+		this.hp = 100;
+		this.monsterPushback = 100;
+		this.monsterDamageTaken = 0;
+	}
+
+	
+}

@@ -1,0 +1,13 @@
+package towers;
+
+public class BasicTower extends BaseTowerClass {
+
+	public BasicTower() {
+
+		
+		
+	}
+
+	
+	
+}

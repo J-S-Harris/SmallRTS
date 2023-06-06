@@ -1,0 +1,11 @@
+package towers;
+
+import com.badlogic.gdx.math.Rectangle;
+
+public class BaseTowerClass extends Rectangle {
+
+	String towerModelName;
+	int hp;
+	
+	
+}

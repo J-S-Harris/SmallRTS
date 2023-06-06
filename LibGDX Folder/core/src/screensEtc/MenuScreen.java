@@ -14,6 +14,10 @@ import utilityClasses.MenuScreenTextManager;
 
 public class MenuScreen implements Screen {
 
+	double versionNumber = 0.1;
+
+	int displayVariable = 0;
+
 	GameScreen gameScreen;
 	Game game;
 	SpriteBatch batch;
@@ -47,9 +51,9 @@ public class MenuScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
-		ScreenUtils.clear(0, 0, 0, 1);
+		ScreenUtils.clear(0.3f, 0.3f, 0.3f, 1);
 		checkForStartInput();
-		
+
 		processBatch();
 
 	}
@@ -61,10 +65,10 @@ public class MenuScreen implements Screen {
 		this.font = new BitmapFont();
 		this.fontHighScore = new BitmapFont();
 		fontHighScore.getData().setScale(2);
-		fontHighScore.setColor(0,1,0.5f,1);
-		
+		fontHighScore.setColor(0, 1, 0.5f, 1);
+
 		lInsetX = gameScreen.getBackground().getWidth() / 20;
-		rInsetX = gameScreen.getBackground().getWidth() / 2;
+		rInsetX = gameScreen.getBackground().getWidth() / 20;
 
 		textManager = new MenuScreenTextManager(this);
 
@@ -73,15 +77,21 @@ public class MenuScreen implements Screen {
 
 		this.highScore = highScore;
 	}
-	
+
 	private void processBatch() {
-		
+
 		leftText = textManager.getLeftText();
 		rightText = textManager.getRightText();
-		
+
 		batch.begin();
 
-		textManager.renderText();
+		if (displayVariable == 0) {
+			textManager.renderLeftText();
+		}
+
+		if (displayVariable == 1) {
+			textManager.renderRightText();
+		}
 
 		batch.end();
 
@@ -90,7 +100,11 @@ public class MenuScreen implements Screen {
 	private void checkForStartInput() {
 
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			game.setScreen(gameScreen);
+			displayVariable++;
+			if (displayVariable == 2) {
+				displayVariable = 0;
+				game.setScreen(gameScreen);
+			}
 		}
 
 	}
@@ -196,8 +210,13 @@ public class MenuScreen implements Screen {
 	public void setFontHighScore(BitmapFont fontHighScore) {
 		this.fontHighScore = fontHighScore;
 	}
-	
-	
-	
+
+	public double getVersionNumber() {
+		return versionNumber;
+	}
+
+	public void setVersionNumber(double versionNumber) {
+		this.versionNumber = versionNumber;
+	}
 
 }

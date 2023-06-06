@@ -8,22 +8,23 @@ import levels.LevelManager;
 import monsters.MonsterBaseClass;
 
 public class Landmine extends BaseTowerClass {
-	
-	int expandedWidth = 200;
-	int expandedHeight = 200;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Landmine(LevelManager levelManager) {
 		super(levelManager);
 		
 		this.towerModelName = "Basic Tower";
-		this.goldToMake = 0;
-		this.stoneToMake = 0;
+		this.goldToMake = 15;
+		this.stoneToMake = 15;
 		this.monsterRemainsToMake = 0;
 		this.hp = 999;
 		this.monsterPushback = 0;
 		this.monsterDamageTaken = 40;
-//		sprite = new Texture(Gdx.files.internal("landmineUnexploded.png"));
-		sprite = new Texture(Gdx.files.internal("castle.png"));
+		sprite = new Texture(Gdx.files.internal("landmine.png"));
 		this.width = sprite.getWidth();
 		this.height = sprite.getHeight();
 	}
@@ -35,10 +36,12 @@ public class Landmine extends BaseTowerClass {
 		// this.sprite = new Texture(Gdx.files.internal("landmineExploded.png");
 //		this.width = sprite.width;
 //		this.height = sprite.height;
-		this.width = expandedWidth;
-		this.height = expandedHeight;
-		this.x-= expandedWidth/2;
-		this.y-= expandedHeight/2;
+		sprite = new Texture(Gdx.files.internal("explosion.png"));
+		this.width = sprite.getWidth();
+		this.height = sprite.getHeight();
+		this.x-= this.width/4;
+		this.y-= this.height/4;
+		levelManager.getBatch().draw(this.sprite, this.x, this.y);
 		
 		for (MonsterBaseClass monster2 : levelManager.getEnemiesThisTurn()) {
 			if (monster2.overlaps(this)) {

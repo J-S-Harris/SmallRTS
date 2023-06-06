@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog">
+		<item key="ShowStatusLine" value="true"/>
+		<item key="History" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0D;&#x0A;&lt;History&gt;&#x0D;&#x0A;&lt;historyRootNode&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/LibGDX Folder/core/bin/main/com/mygdx/smallrts/gameElements/MineRootClass.class&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/LibGDX Folder/core/src/com/mygdx/smallrts/gameElements/MineRootClass.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/SmallRTS-core/src/monsters/MonsterFastStrong.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/SmallRTS-core/src/monsters/MonsterVerySlowVeryStrong.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/SmallRTS-core/src/monsters/MonsterWeakSlow.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/SmallRTS-core/src/monsters/MonsterBaseClass.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/SmallRTS-core/src/com/mygdx/smallrts/gameElements/PuckRootClass.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/SmallRTS-core/src/towers/BasicTower.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/SmallRTS-core/src/towers/BarbedWire.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/SmallRTS-core/src/towers/BaseTowerClass.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;/historyRootNode&gt;&#x0D;&#x0A;&lt;/History&gt;"/>
+		<item key="ShowDerived" value="false"/>
+		<item key="FilterByLocation" value="false"/>
+		<item key="WorkingSet" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0D;&#x0A;&lt;workingSet workingSetName=&quot;&quot;/&gt;"/>
+		<section name="DialogBoundsSettings">
+			<item key="DIALOG_HEIGHT" value="523"/>
+			<item key="DIALOG_WIDTH" value="493"/>
+			<item key="DIALOG_X_ORIGIN" value="669"/>
+			<item key="DIALOG_Y_ORIGIN" value="216"/>
+			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|5|0|Segoe UI"/>
+		</section>
+	</section>
+</section>

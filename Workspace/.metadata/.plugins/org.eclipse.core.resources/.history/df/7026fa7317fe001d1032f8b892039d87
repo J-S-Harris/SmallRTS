@@ -1,0 +1,14 @@
+package towers;
+
+public class BarbedWire extends BaseTowerClass {
+
+	public BarbedWire() {
+		this.towerModelName = "BarbedWire";
+		this.goldToMake = 5;
+		this.monsterRemainsToMake = 0;
+		this.hp = 100;
+		this.monsterPushback = 0;
+		this.monsterDamageTaken = 2;
+	}
+	
+}

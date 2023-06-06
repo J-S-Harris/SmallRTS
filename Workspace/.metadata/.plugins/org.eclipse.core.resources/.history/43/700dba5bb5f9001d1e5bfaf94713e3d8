@@ -1,0 +1,35 @@
+package towers;
+
+import com.badlogic.gdx.math.Rectangle;
+
+import monsters.MonsterBaseClass;
+
+public class BaseTowerClass extends Rectangle {
+
+	String towerModelName;
+	int costToMake;
+	int hp;
+	int monsterPushback;
+	int monsterDamageTaken;
+
+	public BaseTowerClass(String towerModelName, int costToMake, int hp, int monsterPushback, int monsterDamageTaken) {
+		super();
+		this.towerModelName = towerModelName;
+		this.costToMake = costToMake;
+		this.hp = hp;
+		this.monsterPushback = monsterPushback;
+		this.monsterDamageTaken = monsterDamageTaken;
+	}
+
+	public void monsterCollisionMethod(MonsterBaseClass monster) {
+
+		// This tower gets damaged
+		this.hp -= monster.getAttackPower();
+
+		// Monster is damaged and repulsed
+		monster.setRemainingHP(monster.getRemainingHP() - monsterDamageTaken);
+		monster.x += monsterPushback;
+
+	}
+
+}

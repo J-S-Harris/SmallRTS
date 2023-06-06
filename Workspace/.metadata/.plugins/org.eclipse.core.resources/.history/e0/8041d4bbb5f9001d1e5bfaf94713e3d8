@@ -1,0 +1,16 @@
+package towers;
+
+public class BasicTower extends BaseTowerClass {
+
+	public BasicTower() {
+		this.towerModelName = "BaseTowerClass";
+		this.goldToMake = 0;
+		this.monsterRemainsToMake = 0;
+		this.hp = 100;
+		this.monsterPushback = 10;
+		this.monsterDamageTaken = 0;
+	}
+
+	
+	
+}

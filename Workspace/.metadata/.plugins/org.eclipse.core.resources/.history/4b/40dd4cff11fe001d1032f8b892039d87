@@ -1,0 +1,24 @@
+package monsters;
+
+import levels.LevelManager;
+
+public class MonsterVerySlowVeryStrong extends MonsterBaseClass {
+
+	public MonsterVerySlowVeryStrong(LevelManager levelManager, float movementSpeed, int attackPower, int goldSteal, int movementDelay) {
+		super(levelManager, movementSpeed, attackPower, goldSteal, movementDelay);
+		// TODO Auto-generated constructor stub
+	}
+
+	public MonsterVerySlowVeryStrong() {
+		super();
+
+		this.movementSpeed = 4;
+		this.attackPower = 8;
+		this.goldSteal = 30;
+		this.movementDelay = 120;
+		this.remainingHP = (int) (100 + Math.pow(levelManager.getCurrentLevel(), 2));
+		this.weight = 9;
+		
+	}
+
+}

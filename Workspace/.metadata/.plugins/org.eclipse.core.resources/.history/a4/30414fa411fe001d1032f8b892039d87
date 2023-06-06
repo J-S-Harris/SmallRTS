@@ -1,0 +1,24 @@
+package monsters;
+
+import levels.LevelManager;
+
+public class MonsterFastStrong extends MonsterBaseClass {
+
+	public MonsterFastStrong(LevelManager levelManager, float movementSpeed, int attackPower, int goldSteal, int movementDelay) {
+		super(levelManager, movementSpeed, attackPower, goldSteal, movementDelay);
+		// TODO Auto-generated constructor stub
+	}
+
+	public MonsterFastStrong() {
+		super();
+
+		this.movementSpeed = 10;
+		this.attackPower = 2;
+		this.goldSteal = 10;
+		this.movementDelay = 30;
+		this.remainingHP = 15 + (levelManager.getCurrentLevel()*levelManager.getCurrentLevel());
+		this.weight = 6;
+		
+	}
+
+}

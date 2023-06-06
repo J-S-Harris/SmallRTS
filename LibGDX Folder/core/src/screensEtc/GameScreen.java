@@ -116,6 +116,9 @@ public class GameScreen implements Screen {
 		checkMiscellaneousInputs();
 
 		drawGameUnits();
+
+		checkIfDisplayInstructions();
+
 		// For pausing game
 		if (pauseCheck == 1) {
 			check123Pressed(); // Check if 1/2/3 are pressed to see which units will be given orders this frame
@@ -142,6 +145,19 @@ public class GameScreen implements Screen {
 		}
 
 		batch.end();
+
+	}
+
+	private void checkIfDisplayInstructions() {
+
+		if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+			String inputsText1 = "MOVE UNITS: Numpad inputs > WASD     ||     MINE GOLD/STONE: Q/E + NumPad     ||     BUILD TOWER/BARBS/LANDMINE: T/B/L + NumPad";
+			String inputsText2 = "ATTACK: R + NumPad     ||     UPGRADE UNIT: U + NumPad     ||     BUY UNIT: 0     ||     UPGRADE UNIT: U + NumPad";
+			String inputsText3 = "BUY UNIT: 0     ||     LOW/MID/HIGH POSITION: 1/2/3 + NumPad     ||     CLEAR ORDER: Esc + NumPad";
+			font.draw(batch, inputsText1, 20, 130);
+			font.draw(batch, inputsText2, 20, 110);
+			font.draw(batch, inputsText3, 20, 90);
+		}
 
 	}
 
@@ -229,7 +245,7 @@ public class GameScreen implements Screen {
 			deadUnits.add(puck);
 		}
 		points += 2;
-		
+
 		puck.setRedSprite();
 
 	}
@@ -245,6 +261,13 @@ public class GameScreen implements Screen {
 				if (monster.getMovementDelay() > 1) {
 					monster.setMovementDelay(monster.getMovementDelay() - 1);
 				}
+			}
+			largeFont.draw(batch, "Everyone is dead :(", background.getWidth() / 2 - 50,
+					background.getHeight() / 2 + 50);
+			largeFont.draw(batch, "GAME OVER", background.getWidth() / 2 - 50, background.getHeight() / 2);
+			font.draw(batch, "Press space to quit", background.getWidth() / 2 - 50, background.getHeight() / 2 - 50);
+			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				menuScreen.getGame().setScreen(menuScreen);
 			}
 		}
 
@@ -306,13 +329,13 @@ public class GameScreen implements Screen {
 
 		if (goldGathered >= getCostToUpgradeUnit) {
 			goldGathered -= getCostToUpgradeUnit;
-			puck.setMovementSpeed(puck.getMovementSpeed()+1);
-			puck.setBaseHp(puck.getBaseHp()+20);
+			puck.setMovementSpeed(puck.getMovementSpeed() + 1);
+			puck.setBaseHp(puck.getBaseHp() + 20);
 			puck.setHP(puck.getBaseHp());
 			puck.setRedSprite();
 			puck.setCurrentAction("FollowInputs");
 		}
-		
+
 	}
 
 	private void pursueLocatedTarget(PuckRootClass puck) {
@@ -629,7 +652,7 @@ public class GameScreen implements Screen {
 					if (goldGathered >= getCostToUpgradeUnit) {
 						puck.setCurrentAction("upgradeSpeed");
 					}
-					
+
 				} else if (Gdx.input.isKeyPressed(Input.Keys.L)) {
 					puck.setCurrentAction("Build-Landmine");
 
@@ -935,7 +958,13 @@ public class GameScreen implements Screen {
 	public void setgetCostToUpgradeUnit(int getCostToUpgradeUnit) {
 		this.getCostToUpgradeUnit = getCostToUpgradeUnit;
 	}
-	
-	
+
+	public BitmapFont getFont() {
+		return font;
+	}
+
+	public void setFont(BitmapFont font) {
+		this.font = font;
+	}
 
 }
